@@ -35,5 +35,5 @@ termide keybinding set Alt+period termide space terminal_next
 
 #dirty fix
 termide space feed --sid ROOT --cmd 'termide space ha --sid ROOT --size 180' '<Enter>' 'termide tabs2 editor' '<Enter>'
-termide space feed --sid tree --cmd 'termide tree2 editor micro -backup false -rmtrailingws true -tabmovement true -tabstospaces true -eofnewline true -tabmovement true -softwrap true' '<Enter>'
+termide space feed --sid tree --cmd 'termide tree2 editor micro --backup false --rmtrailingws true --tabmovement true --tabstospaces true --eofnewline true --tabmovement true --softwrap true' '<Enter>'
 
