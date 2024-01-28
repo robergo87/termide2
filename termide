@@ -1,0 +1,59 @@
+#!/usr/bin/python3
+
+from os.path import dirname, abspath, join, exists
+from sys import argv, stdout, stderr
+
+from importlib import import_module
+import traceback
+
+import builtins
+from inspect import getframeinfo, stack
+
+"""
+BASE_DIR = dirname(abspath(__file__))
+original_print = print
+def print_wrap(*args, **kwargs):
+        caller = getframeinfo(stack()[1][0])
+        original_print(
+            str(caller.filename)[len(str(BASE_DIR)) :],
+            ":",
+            caller.lineno,
+            flush=True,
+            *args,
+            **kwargs,
+        )
+builtins.print = print_wrap
+builtins.print2 = original_print
+"""
+
+if len(argv) < 2:
+	command = "start"
+else:
+	command = argv[1]
+
+
+try:
+	mod = __import__(f"commands.{command}", fromlist=["commands"])
+except ModuleNotFoundError as e:
+	traceback.print_exc()
+	stderr.write(f"\n------------------------------\n")
+	stderr.write(f"Error loading command '{command}'\n")
+	stderr.write(f"------------------------------\n")
+	exit(1)
+
+try:
+	pa = mod.parser.parse_args(argv[2:])
+	params = vars(mod.parser.parse_args(argv[2:]))
+except Exception as e:
+	traceback.print_exc()
+	stderr.write(f"\n------------------------------\n")
+	stderr.write(f"Error executing command '{command}': parser failed \n")
+	stderr.write(f"------------------------------\n")
+	exit(1)
+	
+if hasattr(mod, "execute_cmd"):
+	mod.execute_cmd(params)
+#if hasattr(mod, "execute_gui"):
+#	mod.execute_gui(params)
+	
+	
