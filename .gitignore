@@ -1,0 +1,4 @@
+.swp
+.mypy_cache
+log.txt
+**/__pycache__/

@@ -1,6 +1,6 @@
 import readline
 from os.path import basename, dirname, abspath, exists, isdir
-from os import remove
+from os import remove, getcwd
 from shutil import move as rename, copy2 as copy, rmtree, copytree 
 from argparse import ArgumentParser, REMAINDER
 
@@ -63,7 +63,7 @@ def execute_copy(params):
 
 def execute_delete(params):
     srcfile = params.get("file")
-    answer = input("Confirm removing:\n{srcfile}\n(Y/N)").lower().strip()
+    answer = input(f"Confirm removing:\n{srcfile}\n(Y/N)").lower().strip()
     if answer != "y":
         return False
     if not exists(srcfile):
@@ -84,9 +84,13 @@ def execute_touch(params):
         print(f"Path {srcfile} does not exists")
         return pressanykey()
     directory = srcfile if isdir(srcfile) else dirname(srcfile)
+    if not directory:
+        directory = getcwd()
     if directory[-1] != "/":
         directory += "/" 
     dstfile = prefilled_input(" New file:\n ", directory)
+    if directory == dstfile:
+        return False
     if exists(dstfile):
         print(f"Path {dstfile} already exists")
         return pressanykey()
