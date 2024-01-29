@@ -19,8 +19,6 @@ class Listing:
 
     def draw_row(self, rownum, row):
         height, width = self.screen.getmaxyx()
-        if rownum >= height:
-            return False
         selected = rownum == self.find_selected()
         if selected:
             def printfunc(content, flags = 0):
@@ -70,10 +68,14 @@ class Listing:
 
     def update_view(self):
         height, width = self.screen.getmaxyx()
-        self.screen.clear()
+        #self.screen.clear()
         self.screen.refresh()
         self.pad.refresh(self.position, 0, 0, 0, height-1, width-1)
+        last_line = len(self.data) - self.position
+        for rownum in range(last_line, height):
+            self.screen.addstr(rownum, 0, " "*(width-1))
 
+        
     def keybinding(self, keylist, unbind=False):
         if unbind:
             for keyname in keylist:
